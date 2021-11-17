@@ -18,12 +18,16 @@ const sceneRoot = Scene.root;
 Promise.all([
   sceneRoot.findFirst("base_jnt"),
   sceneRoot.findFirst("speaker_left_jnt"),
-  sceneRoot.findFirst("speaker_right_jnt")
+  sceneRoot.findFirst("speaker_right_jnt"),
+  sceneRoot.findFirst("planeTracker0"),
+  sceneRoot.findFirst("placer")
 ]).then(function (objects) {
-  // 0. IDENTIFY BASES IN OBJECT
+  // 0. IDENTIFY ITEMS IN OBJECT
   const base = objects[0];
   const speakerLeft = objects[1];
   const speakerRight = objects[2];
+  const planeTracker = objects[3];
+  const placer = objects[4];
 
   // 1.0 CREATING DRIVER FOR BASE
   // sets parameters for animation driver
@@ -83,4 +87,11 @@ Promise.all([
   speakerRightTransform.scaleX = speakerAnimation;
   speakerRightTransform.scaleY = speakerAnimation;
   speakerRightTransform.scaleZ = speakerAnimation;
+
+  // 3.0 CREATING DRIVER FOR SPEAKER
+  // callback function running every time pan gesture is detected, returns EventSource
+  TouchGestures.onPan().subscribe(function (gesture) {
+    // move plane tracker according to location and state of gesture
+    planeTracker.trackPoint(gesture.location, gesture.state);
+  });
 });
