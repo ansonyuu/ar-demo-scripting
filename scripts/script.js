@@ -88,10 +88,40 @@ Promise.all([
   speakerRightTransform.scaleY = speakerAnimation;
   speakerRightTransform.scaleZ = speakerAnimation;
 
-  // 3.0 CREATING DRIVER FOR SPEAKER
+  // 3.0 MOVING OBJECT ON PAN
   // callback function running every time pan gesture is detected, returns EventSource
   TouchGestures.onPan().subscribe(function (gesture) {
     // move plane tracker according to location and state of gesture
     planeTracker.trackPoint(gesture.location, gesture.state);
   });
+
+  // 4.0 MOVING OBJECT ON PINCH
+  // callback function running every time pan gesture is detected, returns EventSource
+
+  const placerTransform = placer.transform;
+
+  TouchGestures.onPinch().subscribeWithSnapshot(
+    {
+      lastScaleX: placerTransform.scaleX,
+      lastScaleY: placerTransform.scaleY,
+      lastScaleZ: placerTransform.scaleZ
+    },
+    function (gesture, snapshot) {
+      placerTransform.scaleX = gesture.scale.mul(snapshot.lastScaleX);
+      placerTransform.scaleY = gesture.scale.mul(snapshot.lastScaleY);
+      placerTransform.scaleZ = gesture.scale.mul(snapshot.lastScaleZ);
+    }
+  );
+
+  // 5.0 MOVING OBJECT ON ROTATE
+  // callback function running every time pan gesture is detected, returns EventSource
+  TouchGestures.onRotate().subscribeWithSnapshot(
+    {
+      lastRotationY: placerTransform.rotationY
+    },
+    function (gesture, snapshot) {
+      const correctRotation = gesture.rotation.mul(-1);
+      placerTransform.rotationY = correctRotation.add(snapshot.lastRotationY);
+    }
+  );
 });
