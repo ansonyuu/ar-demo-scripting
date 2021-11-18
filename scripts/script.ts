@@ -1,11 +1,3 @@
-// Scripting Basics - https://fb.me/spark-scripting-basics
-// Reactive Programming - https://fb.me/spark-reactive-programming
-// Scripting Object Reference - https://fb.me/spark-scripting-reference
-// Changelogs - https://fb.me/spark-changelog
-//
-// Spark AR Studio extension for VS Code - https://fb.me/spark-vscode-plugin
-
-// How to load in modules
 import Scene from "Scene";
 import Animation from "Animation";
 import Diagnostics from "Diagnostics";
@@ -96,10 +88,10 @@ Promise.all([
   });
 
   // 4.0 MOVING OBJECT ON PINCH
-  // callback function running every time pan gesture is detected, returns EventSource
-
   const placerTransform = placer.transform;
 
+  // 4.1 TRANSFORM ON PINCH
+  // callback function running every time pan gesture is detected, returns EventSource
   TouchGestures.onPinch().subscribeWithSnapshot(
     {
       lastScaleX: placerTransform.scaleX,
